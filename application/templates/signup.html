@@ -30,25 +30,15 @@
       <label>Email address</label>
     </div>
     <div class="form-floating" style="padding: 5%; display: inline">
-      <p class="p">Select 6 images as your graphical password:</p>
+      <p class="p">Select 8 images as your graphical password:</p>
       <div class="grid">
-        <button class="btn btn-sm btn-light">
+        {% for data in imageData %} <img src={{data["image"]}}
+        alt={{data["alt"]}}> {% endfor %}
+        <!-- <button class="btn btn-sm btn-light">
           <img src="../static/images/image.png" alt="Image 1" />
-        </button>
-        <button class="btn btn-sm btn-light">
-          <img src="../static/images/image.png" alt="Image 1" />
-        </button>
-        <button class="btn btn-sm btn-light">
-          <img src="../static/images/image.png" alt="Image 1" />
-        </button>
-        <button class="btn btn-sm btn-light">
-          <img src="../static/images/image.png" alt="Image 1" />
-        </button>
-        <button class="btn btn-sm btn-light">
-          <img src="../static/images/image.png" alt="Image 1" />
-        </button>
+        </button> -->
       </div>
-      <input type="hidden" id="password" name="password" />
+      <input type="hidden" id="selected_images" name="selected_images" />
     </div>
 
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
@@ -63,9 +53,9 @@
   var images = document.querySelectorAll(".grid img");
   images.forEach(function (image) {
     image.addEventListener("click", function () {
-      if (selectedImages.length < 5 && !selectedImages.includes(image.alt)) {
+      if (selectedImages.length < 8 && !selectedImages.includes(image.alt)) {
         selectedImages.push(image.alt);
-        image.style.border = "5px solid green";
+        image.style.border = "1px solid gray";
       } else if (selectedImages.includes(image.alt)) {
         var index = selectedImages.indexOf(image.alt);
         if (index !== -1) {
@@ -75,6 +65,7 @@
       }
       document.getElementById("selected_images").value =
         selectedImages.join(",");
+      console.log(selectedImages);
     });
   });
 </script>

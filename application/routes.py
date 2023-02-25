@@ -13,4 +13,8 @@ def login():
 
 @app.route("/signup")
 def signup():
-    return render_template("signup.html")
+    imageData = [{"image": "../static/images/image.png", "alt": "image1"}, 
+                 {"image": "../static/images/image.png", "alt": "image2"}, 
+                 {"image": "../static/images/image.png", "alt": "image3"}, 
+                 {"image": "../static/images/image.png", "alt": "image4"}]
+    return render_template("signup.html", imageData=imageData)
