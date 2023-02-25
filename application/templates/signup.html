@@ -1,64 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="" />
-    <meta
-      name="author"
-      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
-    />
-    <meta name="generator" content="Hugo 0.108.0" />
-    <title>Create an Account</title>
-    <link href="../static/css/sign-in.css" rel="stylesheet" />
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet" />
-  </head>
-  <body class="text-center" style="background-color: rgba(239, 237, 237, 1)">
-    <main class="form-signin w-100 m-auto">
-      <form>
-        <h1 class="h3 mb-3 fw-normal">Create an New Account</h1>
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            id="floatingInput"
-            placeholder="Username"
-          />
-          <label for="floatingInput">Username</label>
-        </div>
-        <div class="form-floating">
-          <input
-            type="date"
-            class="form-control"
-            id="floatingInput"
-            placeholder="Birthday"
-          />
-          <label for="floatingInput">Birthday</label>
-        </div>
-        <div class="form-floating">
-          <input
-            type="email"
-            class="form-control"
-            id="floatingInput"
-            placeholder="name@example.com"
-          />
-          <label for="floatingInput">Email address</label>
-        </div>
-        <div class="form-floating">
-          <input
-            type="password"
-            class="form-control"
-            id="floatingPassword"
-            placeholder="Password"
-          />
-          <label for="floatingPassword">Password</label>
-        </div>
-
-        <button class="w-100 btn btn-lg btn-primary" type="submit">
-          Sign in
+{% extends "layout.html" %} {% block content %}
+<div class="text-center form-signin w-100 m-auto">
+  <form>
+    <h2 class="h2 fw-normal">Create an New Account</h2>
+    <div class="form-floating" style="margin: 3% 0%">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Username"
+        style="height: 40px"
+      />
+      <label>Username</label>
+    </div>
+    <div class="form-floating" style="margin: 3% 0%">
+      <input
+        type="date"
+        class="form-control"
+        placeholder="Birthday"
+        style="height: 50px"
+      />
+      <label>Birthday</label>
+    </div>
+    <div class="form-floating" style="margin: 3% 0%">
+      <input
+        type="email"
+        class="form-control"
+        placeholder="name@example.com"
+        style="height: 40px"
+      />
+      <label>Email address</label>
+    </div>
+    <div class="form-floating" style="padding: 5%; display: inline">
+      <p class="p">Select 6 images as your graphical password:</p>
+      <div class="grid">
+        <button class="btn btn-sm btn-light">
+          <img src="../static/images/image.png" alt="Image 1" />
         </button>
-        <!-- <p class="mt-5 mb-3 text-muted">&copy; 2022</p> -->
-      </form>
-    </main>
-  </body>
-</html>
+        <button class="btn btn-sm btn-light">
+          <img src="../static/images/image.png" alt="Image 1" />
+        </button>
+        <button class="btn btn-sm btn-light">
+          <img src="../static/images/image.png" alt="Image 1" />
+        </button>
+        <button class="btn btn-sm btn-light">
+          <img src="../static/images/image.png" alt="Image 1" />
+        </button>
+        <button class="btn btn-sm btn-light">
+          <img src="../static/images/image.png" alt="Image 1" />
+        </button>
+      </div>
+      <input type="hidden" id="password" name="password" />
+    </div>
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <!-- <p class="mt-5 mb-3 text-muted">&copy; 2022</p> -->
+  </form>
+</div>
+<script type="text/javascript">
+  // Keep track of selected images
+  var selectedImages = [];
+
+  // Add click event listener to images
+  var images = document.querySelectorAll(".grid img");
+  images.forEach(function (image) {
+    image.addEventListener("click", function () {
+      if (selectedImages.length < 5 && !selectedImages.includes(image.alt)) {
+        selectedImages.push(image.alt);
+        image.style.border = "5px solid green";
+      } else if (selectedImages.includes(image.alt)) {
+        var index = selectedImages.indexOf(image.alt);
+        if (index !== -1) {
+          selectedImages.splice(index, 1);
+          image.style.border = "none";
+        }
+      }
+      document.getElementById("selected_images").value =
+        selectedImages.join(",");
+    });
+  });
+</script>
+{% endblock %}

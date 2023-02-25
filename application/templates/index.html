@@ -1,54 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-    />
-    <title>Home Page</title>
-  </head>
-  <body>
-    {% include "includes/nav.html" %}
-    <div class="jumbotron text-center">
-      <h1>Graphical Password Authentication</h1>
-      {% if login %}
-      <p>Welcome back, !</p>
-      {% else %}
-      <p>Create an account to get started!</p>
-      {% endif %}
+{% extends "layout.html" %} {% block content %}
+<link href="../static/css/bootstrap.min.css" rel="stylesheet" />
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+/>
+<div class="jumbotron text-center">
+  <h1>Graphical Password Authentication</h1>
+  {% if login %}
+  <p>Welcome back, !</p>
+  {% else %}
+  <p>Create an account to get started!</p>
+  {% endif %}
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>What is a graphical password authenticator?</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+      </p>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-4">
-          <h3>What is a graphical password authenticator?</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-          <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris...
-          </p>
-        </div>
-        <div class="col-sm-4">
-          <h3>What technologies were used to build this webapp?</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-          <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris...
-          </p>
-        </div>
-        <div class="col-sm-4">
-          <h3>How do you use this webapp?</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-          <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris...
-          </p>
-        </div>
-      </div>
+    <div class="col-sm-4">
+      <h3>What technologies were used to build this webapp?</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+      </p>
     </div>
-  </body>
-  {% include "includes/footer.html" %}
-</html>
+    <div class="col-sm-4">
+      <h3>How do you use this webapp?</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...
+      </p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
