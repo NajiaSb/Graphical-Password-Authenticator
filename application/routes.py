@@ -7,13 +7,19 @@ from flask import render_template, request
 def index():
     return render_template("index.html", login=False)
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["POST", "GET"])
 def login():
     imageData = [{"image": "../static/images/image.png", "alt": "image1"}, 
                  {"image": "../static/images/image.png", "alt": "image2"}, 
                  {"image": "../static/images/image.png", "alt": "image3"}, 
                  {"image": "../static/images/image.png", "alt": "image4"}]
+    
+    if request.method == "POST":
+        username = request.form["username"]
+        selected_images = request.form.getlist("selected_images")
+        return "Successful Login!!"
     return render_template("login.html", imageData=imageData)
+
 
 
 @app.route("/signup", methods=["POST", "GET"])
