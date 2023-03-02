@@ -1,6 +1,7 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %} 
+{% block content %}
 <div class="text-center form-signin w-100 m-auto">
-  <form>
+  <form action="{{ url_for('login') }}" method="post">
     <h2 class="h2 fw-normal">Login</h2>
     <div class="form-floating" style="margin: 3% 0%">
       <input
@@ -8,14 +9,21 @@
         class="form-control"
         placeholder="Username"
         style="height: 40px"
+        name="username"
+        required
       />
       <label>Username</label>
     </div>
     <div class="form-floating" style="padding: 5%; display: inline">
       <p class="p">Select 8 images as your graphical password:</p>
       <div class="grid">
-        {% for data in imageData %} <img src={{data["image"]}}
-        alt={{data["alt"]}}> {% endfor %}
+        {% for data in imageData %} 
+          <img src="{{ data['image'] }}"
+            alt="{{ data['alt'] }}"
+            onclick="selectImage(this)"
+            style="cursor: pointer;"
+          >
+        {% endfor %}
       </div>
       <input type="hidden" id="selected_images" name="selected_images" />
     </div>
@@ -23,6 +31,7 @@
     <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
   </form>
 </div>
+
 <script type="text/javascript">
   // Keep track of selected images
   var selectedImages = [];
