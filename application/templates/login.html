@@ -1,5 +1,4 @@
-{% extends "layout.html" %} 
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 <div class="text-center form-signin w-100 m-auto">
   <form action="{{ url_for('login') }}" method="post">
     <h2 class="h2 fw-normal">Login</h2>
@@ -17,24 +16,45 @@
     <div class="form-floating" style="padding: 5%; display: inline">
       <p class="p">Select 8 images as your graphical password:</p>
       <div class="grid">
-        {% for data in imageData %} 
-          <img src="{{ data['image'] }}"
-            alt="{{ data['alt'] }}"
-            onclick="selectImage(this)"
-            style="cursor: pointer;"
-          >
+        {% for data in imageData %}
+        <img
+          src="{{ data['image'] }}"
+          alt="{{ data['alt'] }}"
+          id="{{ data['alt'] }}"
+        />
         {% endfor %}
       </div>
       <input type="hidden" id="selected_images" name="selected_images" />
     </div>
 
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+    <div style="padding: 5%; display: block">
+      <button
+        class="w-30 btn btn-lg btn-light"
+        type="reset"
+        onclick="clearImages()"
+      >
+        Clear
+      </button>
+      <button class="w-50 btn btn-lg btn-primary" type="submit" class="submit">
+        Sign up
+      </button>
+    </div>
   </form>
 </div>
 
 <script type="text/javascript">
   // Keep track of selected images
   var selectedImages = [];
+
+  function clearImages() {
+    selectedImages.forEach((image) => {
+      var clearImage = document.getElementById(image);
+      console.log(clearImage);
+      clearImage.classList.remove("selected_images");
+      clearImage.removeAttribute("style");
+    });
+    selectedImages = [];
+  }
 
   // Add click event listener to images
   var images = document.querySelectorAll(".grid img");
@@ -52,7 +72,6 @@
       }
       document.getElementById("selected_images").value =
         selectedImages.join(",");
-      console.log(selectedImages);
     });
   });
 </script>
