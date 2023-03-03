@@ -1,55 +1,109 @@
-{% extends "layout.html" %}
-
-{% block content %}
-<div class="text-center form-signin w-100 m-auto">
-  <form action="{{ url_for('signup') }}" method="post">
-    <h2 class="h2 fw-normal">Create a New Account</h2>
-    <div class="form-floating" style="margin: 3% 0%">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Username"
-        style="height: 40px"
-        name="username"
-        required
-      />
-      <label>Username</label>
-    </div>
-    <div class="form-floating" style="margin: 3% 0%">
-      <input
-        type="date"
-        class="form-control"
-        placeholder="Birthday"
-        style="height: 50px"
-        name="birthday"
-        required
-      />
-      <label>Birthday</label>
-    </div>
-    <div class="form-floating" style="margin: 3% 0%">
-      <input
-        type="email"
-        class="form-control"
-        placeholder="name@example.com"
-        style="height: 40px"
-        name="email"
-        required
-      />
-      <label>Email address</label>
-    </div>
-    <div class="form-floating" style="padding: 5%; display: inline">
-      <p class="p">Select 8 images as your graphical password:</p>
-      <div class="grid">
-        {% for data in imageData %}
-        <label>
-          <input type="checkbox" name="selected_images" value="{{ data['alt'] }}" />
-          <img src={{data["image"]}} alt={{data["alt"]}}>
-        </label>
-        {% endfor %}
+{% extends "layout.html" %} {% block content %}
+<body>
+  <div class="text-center form-signin w-100 m-auto">
+    <!-- form -->
+    <form action="{{ url_for('signup') }}" method="post" id="signupForm">
+      <h2 class="h2 fw-normal">Create a New Account</h2>
+      <!-- username input -->
+      <div class="form-floating" style="margin: 3% 0%">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Username"
+          style="height: 40px"
+          name="username"
+          required
+        />
+        <label>Username</label>
       </div>
-    </div>
-
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
-  </form>
-</div>
+      <!-- birthday input -->
+      <div class="form-floating" style="margin: 3% 0%">
+        <input
+          type="date"
+          class="form-control"
+          placeholder="Birthday"
+          style="height: 50px"
+          name="birthday"
+          required
+        />
+        <label>Birthday</label>
+      </div>
+      <!-- email input -->
+      <div class="form-floating" style="margin: 3% 0%">
+        <input
+          type="email"
+          class="form-control"
+          placeholder="name@example.com"
+          style="height: 40px"
+          name="email"
+          required
+        />
+        <label>Email address</label>
+      </div>
+      <!-- password input -->
+      <div class="form-floating" style="margin: 3% 0%">
+        <input
+          type="hidden"
+          type="password"
+          id="selected_images"
+          name="selected_images"
+          pattern=".{62,}"
+          required
+        />
+      </div>
+      <div class="form-floating" style="padding: 5%; display: inline">
+        <p class="p">Select 8 images as your graphical password:</p>
+        <div class="grid">
+          {% for data in imageData %} <img src={{data["image"]}}
+          alt={{data["alt"]}}> {% endfor %}
+        </div>
+      </div>
+      <div style="padding: 5%; display: block">
+        <button class="w-30 btn btn-lg btn-light" type="reset">Clear</button>
+        <button
+          class="w-50 btn btn-lg btn-primary"
+          type="submit"
+          class="submit"
+        >
+          Sign up
+        </button>
+      </div>
+    </form>
+    <!-- javascript -->
+    <script type="text/javascript">
+      let form = document.querySelector("#signupForm");
+      form.addEventListener("submit", function (event) {
+        if (selectedImages.length < 8) {
+          alert("Please select at least 8 images for your graphical password.");
+          event.preventDefault();
+          return false;
+        }
+      });
+      // Keep track of selected images
+      var selectedImages = [];
+      // Add click event listener to images
+      var images = document.querySelectorAll(".grid img");
+      images.forEach(function (image) {
+        image.addEventListener("click", function () {
+          if (
+            selectedImages.length < 8 &&
+            !selectedImages.includes(image.alt)
+          ) {
+            selectedImages.push(image.alt + ".png");
+            image.style.border = "1px solid grey";
+          } else if (selectedImages.includes(image.alt)) {
+            var index = selectedImages.indexOf(image.alt);
+            if (index !== -1) {
+              selectedImages.splice(index, 1);
+              image.style.border = "none";
+            }
+          }
+          document.getElementById("selected_images").value =
+            selectedImages.join(", ");
+        });
+      });
+    </script>
+    <!-- end javasctip -->
+  </div>
+</body>
 {% endblock %}
