@@ -16,40 +16,16 @@ SQLPATH = join(dirname(realpath(__file__)), "graphical_password.db")
 @app.route("/home")
 def index():
     return render_template("index.html", login=False)
+
 @app.route("/login", methods=["POST", "GET"])
 def login():
+  
+    
     if request.method == "POST":
         username = request.form["username"]
         selected_images = request.form.getlist("selected_images")
-
-        # Hash the user's entered graphical password
-        password_hash = hashlib.sha512()
-        for path in selected_images:
-            image_path = os.path.join(UPLOADS_PATH, path.strip())
-            with open(image_path, 'rb') as f:
-                data = f.read()
-                password_hash.update(data)
-
-        # Query the database for the user's password hash and birthday using their username
-        conn = db.connect(SQLPATH)
-        cursor = conn.execute("SELECT PASSWORD_HASH, BIRTHDAY FROM USERS WHERE USERNAME=?", (username,))
-        row = cursor.fetchone()
-
-        # Check if the entered graphical password matches the one in the database for the user's username
-        if row is None:
-            error = "Invalid username or password"
-        elif row[0] == password_hash.hexdigest():
-            birthday = row[1]
-            return "Successful Login!!"
-        else:
-            error = "Invalid username or password"
-        conn.close()
-
-        return render_template("login.html", imageData=imageData, error=error)
-
+        return "Successful Login!!"
     return render_template("login.html", imageData=imageData)
-
-
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
