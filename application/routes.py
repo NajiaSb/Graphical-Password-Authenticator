@@ -1,34 +1,69 @@
+import os
 from os.path import join, dirname, realpath
 import hashlib
+import application.db.user_db as user_db
+from application.db.user_db import DuplicateEmailError, register_user
+from application.db.user_db import DuplicateUsernameError, register_user
+import sqlite3 as db
+
 from application import app
 from flask import render_template, request, json, redirect, url_for
+UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/images/')
+SQLPATH = join(dirname(realpath(__file__)), "graphical_password.db")
 
 @app.route("/")
 @app.route("/index")
 @app.route("/home")
 def index():
     return render_template("index.html", login=False)
-
 @app.route("/login", methods=["POST", "GET"])
 def login():
-  
-    
     if request.method == "POST":
         username = request.form["username"]
         selected_images = request.form.getlist("selected_images")
-        return "Successful Login!!"
+
+        # Hash the user's entered graphical password
+        password_hash = hashlib.sha512()
+        for path in selected_images:
+            image_path = os.path.join(UPLOADS_PATH, path.strip())
+            with open(image_path, 'rb') as f:
+                data = f.read()
+                password_hash.update(data)
+
+        # Query the database for the user's password hash and birthday using their username
+        conn = db.connect(SQLPATH)
+        cursor = conn.execute("SELECT PASSWORD_HASH, BIRTHDAY FROM USERS WHERE USERNAME=?", (username,))
+        row = cursor.fetchone()
+
+        # Check if the entered graphical password matches the one in the database for the user's username
+        if row is None:
+            error = "Invalid username or password"
+        elif row[0] == password_hash.hexdigest():
+            birthday = row[1]
+            return "Successful Login!!"
+        else:
+            error = "Invalid username or password"
+        conn.close()
+
+        return render_template("login.html", imageData=imageData, error=error)
+
     return render_template("login.html", imageData=imageData)
 
 
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
-
+    username = ""
+    email = ""
+    password_hash= ""
+    birthday = ""
+    error = None 
     if request.method == "POST":
         username = request.form.get("username")
-        birthday = request.form.get("birthday")
         email = request.form.get("email")
         password = request.form.get("selected_images")
+        birthday = request.form.get("birthday")
+
         print("PASSWORD" + password + "\n")
 
         UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/images/')
@@ -42,8 +77,18 @@ def signup():
                 password_hash.update(data)
         password_hash.update(birthday.encode())
         password_hash = password_hash.hexdigest()
-        return redirect(url_for('index'))
-    return render_template("signup.html", imageData=imageData)
+
+    input_dict = {'username': username, 'birthday': birthday, 'email': email, 'password': password_hash}
+    try:
+        register_user(input_dict)
+        return "Signup successful"
+
+    except DuplicateEmailError:
+        error ="Email already exists in the database"
+    except DuplicateUsernameError:
+            error ="Username already exists in the database"
+    
+    return render_template("signup.html", imageData=imageData, error=error)
 
 
 imageData = [{"image": "../static/images/image1.png", "alt": "image1.png"}, 
