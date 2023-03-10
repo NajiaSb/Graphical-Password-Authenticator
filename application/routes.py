@@ -9,23 +9,47 @@ import sqlite3 as db
 from application import app
 from flask import render_template, request, json, redirect, url_for
 UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/images/')
-SQLPATH = join(dirname(realpath(__file__)), "graphical_password.db")
+SQLPATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "db/graphical_password.db")
 
 @app.route("/")
 @app.route("/index")
 @app.route("/home")
 def index():
     return render_template("index.html", login=False)
-
 @app.route("/login", methods=["POST", "GET"])
 def login():
-  
-    
     if request.method == "POST":
         username = request.form["username"]
-        selected_images = request.form.getlist("selected_images")
-        return "Successful Login!!"
-    return render_template("login.html", imageData=imageData)
+        selected_images_str = request.form.get("selected_images")
+        selected_images = selected_images_str.split(',')
+
+        password_hash = hashlib.sha512()
+        for path in selected_images:
+            with open((UPLOADS_PATH + path.strip()).replace(" ", ""), 'rb') as f:
+                data = f.read()
+                password_hash.update(data)
+        password_hash = password_hash.hexdigest()
+
+        conn = db.connect(SQLPATH)
+        cursor = conn.execute("SELECT * FROM USERS WHERE USERNAME=?", (username,))
+        row = cursor.fetchone()
+        conn.close()
+
+        if row is not None:
+            if row[3] == password_hash:
+                return redirect(url_for('login_success'))
+            else:
+                message = "Wrong password, please try again!"
+        else:
+            message = "Wrong username, please try again!"
+
+        return render_template("login.html", imageData=imageData, login=False, message=message)
+
+    return render_template("login.html", imageData=imageData, login=False, message=None)
+
+
+
+
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
@@ -44,7 +68,6 @@ def signup():
 
         UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/images/')
    
-        #  Hash the password using SHA-256
         image_paths = password.split(',')
         password_hash = hashlib.sha512()
         for path in image_paths:
