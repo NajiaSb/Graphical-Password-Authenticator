@@ -4,6 +4,11 @@
     <!-- form -->
     <form action="{{ url_for('signup') }}" method="post" id="signupForm">
       <h2 class="h2 fw-normal">Create a New Account</h2>
+      {% if message %}
+      <p style="color: green"><strong>Success: </strong>{{message}}</p>
+      {% endif %} {% if error %}
+      <p style="color: red"><strong>Error: </strong>{{error}}</p>
+      {% endif %}
       <!-- username input -->
       <div class="form-floating" style="margin: 3% 0%">
         <input

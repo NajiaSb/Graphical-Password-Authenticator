@@ -2,6 +2,11 @@
 <div class="text-center form-signin w-100 m-auto">
   <form action="{{ url_for('login') }}" method="post">
     <h2 class="h2 fw-normal">Login</h2>
+    {% if message %}
+    <p style="color: green"><strong>Success: </strong>{{message}}</p>
+    {% endif %} {% if error %}
+    <p style="color: red"><strong>Error: </strong>{{error}}</p>
+    {% endif %}
     <div class="form-floating" style="margin: 3% 0%">
       <input
         type="text"
