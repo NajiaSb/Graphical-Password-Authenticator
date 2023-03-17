@@ -5,6 +5,7 @@ import application.db.user_db as user_db
 from application.db.user_db import DuplicateEmailError, register_user
 from application.db.user_db import DuplicateUsernameError, register_user
 import sqlite3 as db
+import random
 
 from application import app
 from flask import render_template, request, json, redirect, url_for
@@ -56,6 +57,7 @@ def login():
         else:
             error = "No account exists with the username!"
         return render_template("login.html", imageData=imageData, login=False, message=message, error=error)
+    random.shuffle(imageData)
 
     return render_template("login.html", imageData=imageData, login=False, message=None, error=None)
 
