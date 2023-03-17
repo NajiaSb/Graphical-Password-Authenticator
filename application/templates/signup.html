@@ -23,15 +23,15 @@
       </div>
       <!-- birthday input -->
       <div class="form-floating" style="margin: 3% 0%">
-        <input
-          type="date"
-          class="form-control"
-          placeholder="Birthday"
-          style="height: 50px"
-          name="birthday"
-          required
+        <input type="text"
+        class="form-control"
+        placeholder="YYYY-MM-DD"
+        style="height: 50px"
+        name="birthday"
+        pattern="\d{4}-\d{2}-\d{2}"
+        required
         />
-        <label>Birthday</label>
+        <label>Birthday (YYYY-MM-DD)</label>
       </div>
       <!-- email input -->
       <div class="form-floating" style="margin: 3% 0%">
@@ -135,3 +135,4 @@
   </div>
 </body>
 {% endblock %}
+
